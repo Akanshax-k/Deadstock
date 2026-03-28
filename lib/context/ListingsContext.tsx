@@ -104,7 +104,11 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const response = await listingService.getNearbyListings(city);
       if (response.success) {
-        setListings(Array.isArray(response.data) ? response.data : [response.data]);
+        if ('listings' in response.data) {
+          setListings(response.data.listings);
+        } else {
+          setListings(Array.isArray(response.data) ? response.data : [response.data]);
+        }
       } else {
         throw new Error(response.message || 'Failed to fetch nearby listings');
       }
@@ -122,7 +126,11 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const response = await listingService.getListingsByCategory(category);
       if (response.success) {
-        setListings(Array.isArray(response.data) ? response.data : [response.data]);
+        if ('listings' in response.data) {
+          setListings(response.data.listings);
+        } else {
+          setListings(Array.isArray(response.data) ? response.data : [response.data]);
+        }
       } else {
         throw new Error(response.message || 'Failed to fetch listings by category');
       }
@@ -140,7 +148,11 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const response = await listingService.getMyListings(status);
       if (response.success) {
-        setMyListings(Array.isArray(response.data) ? response.data : [response.data]);
+        if ('listings' in response.data) {
+          setMyListings(response.data.listings);
+        } else {
+          setMyListings(Array.isArray(response.data) ? response.data : [response.data]);
+        }
       } else {
         throw new Error(response.message || 'Failed to fetch your listings');
       }
@@ -158,7 +170,7 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const response = await listingService.getListingById(listing_id);
       if (response.success) {
-        const listing = Array.isArray(response.data) ? response.data[0] : response.data;
+        const listing = Array.isArray(response.data) ? response.data[0] : ('listings' in response.data ? response.data.listings[0] : response.data);
         setCurrentListing(listing);
       } else {
         throw new Error(response.message || 'Failed to fetch listing');
@@ -194,7 +206,7 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           description
         );
         if (response.success) {
-          const newListing = Array.isArray(response.data) ? response.data[0] : response.data;
+          const newListing = Array.isArray(response.data) ? response.data[0] : ('listings' in response.data ? response.data.listings[0] : response.data);
           setMyListings((prev) => [newListing, ...prev]);
         } else {
           throw new Error(response.message || 'Failed to create listing');
@@ -225,13 +237,13 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       try {
         const response = await listingService.updateListing(listing_id, updates);
         if (response.success) {
-          const updatedListing = Array.isArray(response.data) ? response.data[0] : response.data;
+          const updatedListing = Array.isArray(response.data) ? response.data[0] : ('listings' in response.data ? response.data.listings[0] : response.data);
           setMyListings((prev) =>
             prev.map((listing) => (listing.id === listing_id ? updatedListing : listing))
           );
-          if (currentListing?.id === listing_id) {
-            setCurrentListing(updatedListing);
-          }
+          setCurrentListing((prevListing) =>
+            prevListing?.id === listing_id ? updatedListing : prevListing
+          );
         } else {
           throw new Error(response.message || 'Failed to update listing');
         }
@@ -243,7 +255,7 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setIsLoading(false);
       }
     },
-    [currentListing]
+    []
   );
 
   const deleteListing = useCallback(async (listing_id: string) => {
@@ -253,9 +265,9 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const response = await listingService.deleteListing(listing_id);
       if (response.success) {
         setMyListings((prev) => prev.filter((listing) => listing.id !== listing_id));
-        if (currentListing?.id === listing_id) {
-          setCurrentListing(null);
-        }
+        setCurrentListing((prevListing) =>
+          prevListing?.id === listing_id ? null : prevListing
+        );
       } else {
         throw new Error(response.message || 'Failed to delete listing');
       }
@@ -266,7 +278,7 @@ export const ListingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } finally {
       setIsLoading(false);
     }
-  }, [currentListing]);
+  }, []);
 
   const clearError = useCallback(() => {
     setError(null);
