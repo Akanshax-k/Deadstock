@@ -2,13 +2,15 @@
 
 import { useState } from 'react';
 import { Upload, AlertCircle, ImagePlus } from 'lucide-react';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { SidebarNav } from '@/components/sidebar-nav';
 
 export default function UploadInventoryPage() {
   const [dragActive, setDragActive] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
+    <ProtectedRoute allowedRoles={['seller']}>
+      <div className="flex min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
       <SidebarNav />
 
       <div className="flex-1 p-8 overflow-y-auto">
@@ -224,5 +226,6 @@ export default function UploadInventoryPage() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

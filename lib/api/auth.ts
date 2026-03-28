@@ -15,9 +15,43 @@ export const authService = {
     return response.data;
   },
 
-  // Login
+  // Login for seller
+  loginSeller: async (email: string, password: string) => {
+    const response = await api.post<AuthResponse>('/user/login', {
+      email,
+      password,
+      role: 'seller',
+    });
+    
+    if (response.data.success && response.data.data.access_token) {
+      localStorage.setItem('access_token', response.data.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.data.user));
+      localStorage.setItem('userRole', 'seller');
+    }
+    
+    return response.data;
+  },
+
+  // Login for buyer
+  loginBuyer: async (email: string, password: string) => {
+    const response = await api.post<AuthResponse>('/user/login', {
+      email,
+      password,
+      role: 'buyer',
+    });
+    
+    if (response.data.success && response.data.data.access_token) {
+      localStorage.setItem('access_token', response.data.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.data.user));
+      localStorage.setItem('userRole', 'buyer');
+    }
+    
+    return response.data;
+  },
+
+  // Generic login (for both seller and buyer)
   login: async (email: string, password: string) => {
-    const response = await api.post<AuthResponse>('/auth/login', {
+    const response = await api.post<AuthResponse>('/user/login', {
       email,
       password,
     });
@@ -25,20 +59,39 @@ export const authService = {
     if (response.data.success && response.data.data.access_token) {
       localStorage.setItem('access_token', response.data.data.access_token);
       localStorage.setItem('user', JSON.stringify(response.data.data.user));
+      if (response.data.data.user?.role) {
+        localStorage.setItem('userRole', response.data.data.user.role);
+      }
     }
     
     return response.data;
   },
 
-  // Get current user profile
+  // Get current user profile and verify authentication
   getProfile: async () => {
-    const response = await api.get<AuthResponse>('/auth/me');
+    const response = await api.get<AuthResponse>('/user/me');
+    if (response.data.success && response.data.data.user) {
+      localStorage.setItem('user', JSON.stringify(response.data.data.user));
+    }
     return response.data;
+  },
+
+  // Check if user is authenticated
+  checkAuthStatus: async () => {
+    try {
+      const token = authService.getToken();
+      if (!token) return false;
+      
+      const response = await authService.getProfile();
+      return response.success && !!response.data.user;
+    } catch (error) {
+      return false;
+    }
   },
 
   // Update profile
   updateProfile: async (business_name?: string, city?: string, phone?: string) => {
-    const response = await api.put<AuthResponse>('/auth/me', {
+    const response = await api.put<AuthResponse>('/user/me', {
       business_name,
       city,
       phone,
@@ -48,7 +101,7 @@ export const authService = {
 
   // Change password
   changePassword: async (old_password: string, new_password: string) => {
-    const response = await api.put<AuthResponse>('/auth/me/password', {
+    const response = await api.put<AuthResponse>('/user/me/password', {
       old_password,
       new_password,
     });
@@ -57,7 +110,7 @@ export const authService = {
 
   // Get seller public profile
   getSellerProfile: async (seller_id: string) => {
-    const response = await api.get<AuthResponse>(`/auth/seller/${seller_id}`);
+    const response = await api.get<AuthResponse>(`/user/seller/${seller_id}`);
     return response.data;
   },
 
