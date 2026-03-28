@@ -1,13 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/lib/context';
 
 interface LoginFormProps {
   userType: 'seller' | 'buyer';
@@ -16,8 +17,11 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ userType, title, description }: LoginFormProps) {
+  const router = useRouter();
+  const { login, isLoading, error, clearError } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [localError, setLocalError] = useState<string | null>(null);
 
   const defaultTitle = userType === 'seller' ? 'Seller Login' : 'Buyer Login';
   const defaultDescription = userType === 'seller' 
@@ -26,18 +30,25 @@ export function LoginForm({ userType, title, description }: LoginFormProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    setLocalError(null);
+    clearError();
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      // Redirect logic would go here
+    if (!formData.email || !formData.password) {
+      setLocalError('Please fill in all fields');
+      return;
+    }
+
+    try {
+      await login(formData.email, formData.password);
+      // Redirect based on user type after successful login
       if (userType === 'seller') {
-        window.location.href = '/seller-dashboard';
+        router.push('/seller-dashboard');
       } else {
-        window.location.href = '/marketplace';
+        router.push('/marketplace');
       }
-    }, 1000);
+    } catch (err: any) {
+      setLocalError(err.message || 'Login failed. Please try again.');
+    }
   };
 
   return (
@@ -57,7 +68,10 @@ export function LoginForm({ userType, title, description }: LoginFormProps) {
               type="email"
               placeholder="Enter your email"
               required
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400"
+              disabled={isLoading}
             />
           </div>
           <div className="space-y-2">
@@ -68,7 +82,10 @@ export function LoginForm({ userType, title, description }: LoginFormProps) {
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
                 required
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-400 pr-10"
+                disabled={isLoading}
               />
               <Button
                 type="button"
@@ -76,6 +93,7 @@ export function LoginForm({ userType, title, description }: LoginFormProps) {
                 size="sm"
                 className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                 onClick={() => setShowPassword(!showPassword)}
+                disabled={isLoading}
               >
                 {showPassword ? (
                   <EyeOffIcon className="h-4 w-4 text-slate-400" />
@@ -85,12 +103,18 @@ export function LoginForm({ userType, title, description }: LoginFormProps) {
               </Button>
             </div>
           </div>
+          {(error || localError) && (
+            <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
+              {error || localError}
+            </div>
+          )}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <input
                 type="checkbox"
                 id="remember"
                 className="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-600"
+                disabled={isLoading}
               />
               <Label htmlFor="remember" className="text-sm text-slate-300">
                 Remember me
