@@ -17,7 +17,7 @@ export const authService = {
 
   // Login for seller
   loginSeller: async (email: string, password: string) => {
-    const response = await api.post<AuthResponse>('/auth/login', {
+    const response = await api.post<AuthResponse>('/user/login', {
       email,
       password,
       role: 'seller',
@@ -34,7 +34,7 @@ export const authService = {
 
   // Login for buyer
   loginBuyer: async (email: string, password: string) => {
-    const response = await api.post<AuthResponse>('/auth/login', {
+    const response = await api.post<AuthResponse>('/user/login', {
       email,
       password,
       role: 'buyer',
@@ -51,7 +51,7 @@ export const authService = {
 
   // Generic login (for both seller and buyer)
   login: async (email: string, password: string) => {
-    const response = await api.post<AuthResponse>('/auth/login', {
+    const response = await api.post<AuthResponse>('/user/login', {
       email,
       password,
     });
@@ -69,7 +69,7 @@ export const authService = {
 
   // Get current user profile and verify authentication
   getProfile: async () => {
-    const response = await api.get<AuthResponse>('/auth/me');
+    const response = await api.get<AuthResponse>('/user/me');
     if (response.data.success && response.data.data.user) {
       localStorage.setItem('user', JSON.stringify(response.data.data.user));
     }
@@ -91,7 +91,7 @@ export const authService = {
 
   // Update profile
   updateProfile: async (business_name?: string, city?: string, phone?: string) => {
-    const response = await api.put<AuthResponse>('/auth/me', {
+    const response = await api.put<AuthResponse>('/user/me', {
       business_name,
       city,
       phone,
@@ -101,7 +101,7 @@ export const authService = {
 
   // Change password
   changePassword: async (old_password: string, new_password: string) => {
-    const response = await api.put<AuthResponse>('/auth/me/password', {
+    const response = await api.put<AuthResponse>('/user/me/password', {
       old_password,
       new_password,
     });
@@ -110,7 +110,7 @@ export const authService = {
 
   // Get seller public profile
   getSellerProfile: async (seller_id: string) => {
-    const response = await api.get<AuthResponse>(`/auth/seller/${seller_id}`);
+    const response = await api.get<AuthResponse>(`/user/seller/${seller_id}`);
     return response.data;
   },
 

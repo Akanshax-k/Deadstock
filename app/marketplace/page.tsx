@@ -41,7 +41,7 @@ export default function BuyerMarketplacePage() {
     setCurrentPage(currentPage + 1);
   };
   return (
-    <ProtectedRoute allowedRoles={['buyer']}>
+    <ProtectedRoute allowedRoles={['buyer', 'seller']}>
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
       {/* Header */}
       <header className="border-b border-white/10 bg-slate-950/50 backdrop-blur-xl sticky top-0 z-50">
@@ -57,13 +57,8 @@ export default function BuyerMarketplacePage() {
               <Link href="/orders" className="text-slate-300 hover:text-white transition-colors">My Orders</Link>
             </nav>
             <div className="flex items-center gap-4">
-              <Link href="/auth/buyer/login">
-                <button className="text-slate-300 hover:text-white transition-colors">Sign In</button>
-              </Link>
-              <Link href="/auth/seller/login">
-                <button className="px-6 py-2 bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-2xl hover:shadow-lg hover:shadow-indigo-500/50 transition-all duration-300">
-                  Become a Seller
-                </button>
+              <Link href="/auth/login">
+                <button className="text-slate-300 hover:text-white transition-colors">Account</button>
               </Link>
             </div>
           </div>
