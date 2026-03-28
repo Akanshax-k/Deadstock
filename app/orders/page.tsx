@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Package, ArrowRight, MapPin, TrendingUp, Calendar, Filter, Search } from 'lucide-react';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ImageWithFallback } from '@/components/figma/ImageWithFallback';
 
 const orders = [
@@ -118,7 +119,8 @@ const getStatusText = (status: string) => {
 
 export default function OrdersPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
+    <ProtectedRoute allowedRoles={['buyer']}>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
       {/* Header */}
       <header className="border-b border-white/10 bg-slate-950/50 backdrop-blur-xl sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
@@ -256,5 +258,6 @@ export default function OrdersPage() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }

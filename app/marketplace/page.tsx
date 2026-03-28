@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, Filter, MapPin, Package, TrendingDown, Loader2 } from 'lucide-react';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ImageWithFallback } from '@/components/figma/ImageWithFallback';
 import { useListings } from '@/lib/context';
 
@@ -40,7 +41,8 @@ export default function BuyerMarketplacePage() {
     setCurrentPage(currentPage + 1);
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
+    <ProtectedRoute allowedRoles={['buyer']}>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-950">
       {/* Header */}
       <header className="border-b border-white/10 bg-slate-950/50 backdrop-blur-xl sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
@@ -230,5 +232,6 @@ export default function BuyerMarketplacePage() {
         </div>
       </div>
     </div>
+    </ProtectedRoute>
   );
 }
