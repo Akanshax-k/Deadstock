@@ -97,7 +97,7 @@ export function LoginForm({ userType, title, description }: LoginFormProps) {
               </Label>
             </div>
             <Link href="#" className="text-sm text-indigo-400 hover:text-indigo-300">
-              Forgot password?
+             
             </Link>
           </div>
         </CardContent>
@@ -109,22 +109,9 @@ export function LoginForm({ userType, title, description }: LoginFormProps) {
           >
             {isLoading ? 'Signing in...' : 'Sign In'}
           </Button>
-          <div className="text-center text-sm text-slate-400">
-            Don't have an account?{' '}
-            <Link 
-              href={userType === 'seller' ? '/auth/seller/signup' : '/auth/buyer/signup'} 
-              className="text-indigo-400 hover:text-indigo-300"
-            >
-              Sign up
-            </Link>
-          </div>
+          
           <div className="text-center">
-            <Link 
-              href={userType === 'buyer' ? '/auth/seller/login' : '/auth/buyer/login'} 
-              className="text-sm text-slate-400 hover:text-slate-300"
-            >
-              {userType === 'seller' ? 'Are you a buyer?' : 'Are you a seller?'}
-            </Link>
+           
           </div>
         </CardFooter>
       </form>

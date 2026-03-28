@@ -60,6 +60,7 @@ export default function HomePage() {
               <a href="#how-it-works" className="text-slate-300 hover:text-white transition-colors">How it Works</a>
               <a href="#testimonials" className="text-slate-300 hover:text-white transition-colors">Testimonials</a>
               <Link href="/marketplace" className="text-slate-300 hover:text-white transition-colors">Browse Deals</Link>
+              <Link href="/orders" className="text-slate-300 hover:text-white transition-colors">My Orders</Link>
             </nav>
             <div className="flex items-center gap-4">
               <Link href="/auth/login">
@@ -105,9 +106,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             {/* Left: Text */}
             <div className="space-y-8">
-              <div className="inline-block px-4 py-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-300 text-sm backdrop-blur-sm">
-                🚀 The Future of Inventory Liquidation
-              </div>
+              
               <h1 className="text-5xl md:text-6xl text-white leading-tight">
                 Turn Unsold Stock into{' '}
                 <span className="bg-gradient-to-r from-indigo-400 to-blue-400 bg-clip-text text-transparent">
@@ -265,54 +264,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="container mx-auto px-6 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl text-white mb-4">Trusted by MSMEs Worldwide</h2>
-          <p className="text-xl text-slate-400">See what our customers have to say</p>
-        </div>
-        <div className="grid md:grid-cols-3 gap-8">
-          {[
-            { quote: 'DeadStock helped us recover $120K from old inventory that was sitting in our warehouse for 18 months. The process was incredibly smooth.', name: 'Rajesh Kumar', title: 'CEO, TechParts India', gradient: 'from-indigo-400 to-blue-400' },
-            { quote: "The analytics dashboard gives us insights we never had before. We've reduced dead stock by 60% in just 6 months.", name: 'Sarah Chen', title: 'Operations Manager, FashionHub', gradient: 'from-purple-400 to-pink-400' },
-            { quote: "As a buyer, I've found incredible deals here. The quality verification process gives me confidence in every purchase.", name: 'Michael Rodriguez', title: 'Procurement Head, RetailCorp', gradient: 'from-green-400 to-emerald-400' },
-          ].map((t) => (
-            <div key={t.name} className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-8">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (<CheckCircle2 key={i} className="w-5 h-5 text-yellow-400 fill-yellow-400" />))}
-              </div>
-              <p className="text-slate-300 mb-6 leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
-              <div className="flex items-center gap-3">
-                <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${t.gradient}`} />
-                <div>
-                  <div className="text-white">{t.name}</div>
-                  <div className="text-sm text-slate-400">{t.title}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      
 
-      {/* Trust Badges */}
-      <section className="container mx-auto px-6 py-20">
-        <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-xl border border-white/10 rounded-3xl p-12 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Shield className="w-8 h-8 text-green-400" />
-            <h3 className="text-2xl text-white">Enterprise-Grade Security</h3>
-          </div>
-          <p className="text-slate-400 mb-8 max-w-2xl mx-auto">Your data is protected with bank-level encryption. All transactions are secured and buyers are verified.</p>
-          <div className="flex flex-wrap items-center justify-center gap-8">
-            <div className="text-slate-400">SOC 2 Certified</div>
-            <div className="w-px h-8 bg-white/10" />
-            <div className="text-slate-400">256-bit Encryption</div>
-            <div className="w-px h-8 bg-white/10" />
-            <div className="text-slate-400">PCI Compliant</div>
-            <div className="w-px h-8 bg-white/10" />
-            <div className="text-slate-400">ISO 27001</div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* CTA Section */}
       <section className="container mx-auto px-6 py-20">
@@ -320,7 +274,7 @@ export default function HomePage() {
           <div className="absolute inset-0 opacity-30" style={{ backgroundImage: "url(\"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjEiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==\")" }} />
           <div className="relative">
             <h2 className="text-4xl md:text-5xl text-white mb-6">Ready to Transform Your Dead Inventory?</h2>
-            <p className="text-xl text-indigo-100 mb-8 max-w-2xl mx-auto">Join thousands of businesses already recovering value from unsold stock</p>
+           
             <div className="flex flex-wrap gap-4 justify-center">
               <Link href="/upload-inventory">
                 <button className="px-8 py-4 bg-white text-indigo-600 rounded-2xl hover:shadow-2xl transition-all duration-300">Start Selling Now</button>

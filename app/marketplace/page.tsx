@@ -25,7 +25,7 @@ export default function BuyerMarketplacePage() {
             <nav className="hidden md:flex items-center gap-8">
               <Link href="/marketplace" className="text-white">Marketplace</Link>
               <Link href="/seller-dashboard" className="text-slate-300 hover:text-white transition-colors">Seller Dashboard</Link>
-              <a href="#" className="text-slate-300 hover:text-white transition-colors">My Orders</a>
+              <Link href="/orders" className="text-slate-300 hover:text-white transition-colors">My Orders</Link>
             </nav>
             <div className="flex items-center gap-4">
               <button className="text-slate-300 hover:text-white transition-colors">Sign In</button>
